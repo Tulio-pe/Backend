@@ -10,9 +10,8 @@ import lombok.Setter;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-@Setter
 @Getter
+@Setter
 @Entity
 public class Workshop extends AuditableAbstractAggregateRoot<Workshop> {
 @Embedded
@@ -46,6 +45,12 @@ private WorkshopDescription description;
     public String getWorkshopName(){
         return workshopName.workshopName();
     }
+
+    public String getWorkshopAddress(){return workshopAddress.address();}
+    public String getWorkshopPhone(){return workshopPhone.workshopPhone();}
+    public String getPhoto(){return photo.photo();}
+    public String getDescription(){return description.description();}
+
 public Workshop(){this.services = new HashSet<>();}
 
 public Workshop(String workshopName, String workshopPhone, String workshopAddress, String workshopEmail,String photo, String workshopDescription) {
