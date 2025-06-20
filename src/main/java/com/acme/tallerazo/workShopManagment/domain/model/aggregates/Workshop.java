@@ -37,6 +37,8 @@ private Photo photo;
         @AttributeOverride(name="description", column = @Column(name="Workshop_description"))
 })
 private WorkshopDescription description;
+@Embedded
+private Manager_id manager_id;
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name="workshop_services",joinColumns =@JoinColumn(name="workshop_id"),
             inverseJoinColumns = @JoinColumn(name="services_id"))
