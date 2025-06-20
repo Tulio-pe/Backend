@@ -10,7 +10,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.stream.Collectors;
+import java.util.Collections;
 
 @Getter
 @EqualsAndHashCode
@@ -47,10 +47,10 @@ public class UserDetailsImpl implements UserDetails {
      * @return The UserDetailsImpl object.
      */
     public static UserDetailsImpl build(User user) {
-        var authorities = user.getRoles().stream()
-                .map(role -> role.getName().name())
-                .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
+        // Si no tienes roles, puedes asignar un authority por defecto
+        // Aquí simplemente se asigna "ROLE_USER", pero puedes modificarlo según tus necesidades
+        Collection<? extends GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
+
         return new UserDetailsImpl(
                 user.getUsername(),
                 user.getPassword(),

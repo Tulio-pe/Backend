@@ -3,10 +3,11 @@ package com.acme.tallerazo.iam.application.interal.commandservices;
 import com.acme.tallerazo.iam.application.interal.outboundservices.hashing.HashingService;
 import com.acme.tallerazo.iam.application.interal.outboundservices.tokens.TokenService;
 import com.acme.tallerazo.iam.domain.model.aggregates.User;
+import com.acme.tallerazo.iam.domain.model.commands.SignInByEmailCommand;
 import com.acme.tallerazo.iam.domain.model.commands.SignInCommand;
 import com.acme.tallerazo.iam.domain.model.commands.SignUpCommand;
+import com.acme.tallerazo.iam.domain.model.valueobjects.EmailAddress;
 import com.acme.tallerazo.iam.domain.services.UserCommandService;
-import com.acme.tallerazo.iam.infrastructure.persistence.jpa.repositories.RoleRepository;
 import com.acme.tallerazo.iam.infrastructure.persistence.jpa.repositories.UserRepository;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.springframework.stereotype.Service;
@@ -20,13 +21,11 @@ public class UserCommandServiceImpl implements UserCommandService {
     private final HashingService hashingService;
     private final TokenService tokenService;
 
-    private final RoleRepository roleRepository;
-
-    public UserCommandServiceImpl(UserRepository userRepository, HashingService hashingService, TokenService tokenService, RoleRepository roleRepository) {
+    public UserCommandServiceImpl(UserRepository userRepository, HashingService hashingService, TokenService tokenService) {
         this.userRepository = userRepository;
         this.hashingService = hashingService;
         this.tokenService = tokenService;
-        this.roleRepository = roleRepository;
+
     }
 
     /**
@@ -49,6 +48,19 @@ public class UserCommandServiceImpl implements UserCommandService {
         return Optional.of(ImmutablePair.of(user.get(), token));
     }
 
+    @Override
+    public Optional<ImmutablePair<User, String>> handle(SignInByEmailCommand command) {
+        var email = new EmailAddress(command.email());
+        var user = userRepository.findByEmailAddress(email);
+        if(user.isEmpty()){
+            throw new IllegalArgumentException("email not found ");
+        }
+        if(!hashingService.matches(command.password(), user.get().getPassword().password())){
+            throw new IllegalArgumentException("invalid password");
+        }
+        var token=tokenService.generateToken(user.get().getStringEmail());
+        return Optional.of(ImmutablePair.of(user.get(),token));
+    }
     /**
      * Handle the sign-up command
      * <p>
@@ -59,11 +71,12 @@ public class UserCommandServiceImpl implements UserCommandService {
      */
     @Override
     public Optional<User> handle(SignUpCommand command) {
-        if (userRepository.existsByUsername(command.username()))
-            throw new RuntimeException("Username already exists");
-        var roles = command.roles().stream().map(role -> roleRepository.findByName(role.getName()).orElseThrow(() -> new RuntimeException("Role name not found"))).toList();
-        var user = new User(command.username(), command.firstName(),command.lastName(),command.email(),hashingService.encode(command.password()), roles);
+        var email= new EmailAddress(command.email());
+        if (userRepository.existsByUsername(command.username())||userRepository.existsByEmailAddress(email))
+            throw new RuntimeException("Username already exists or email alredy exist");
+        var user = new User(command.username(), command.firstName(),command.lastName(),command.email(),hashingService.encode(command.password()));
         userRepository.save(user);
         return userRepository.findByUsername(command.username());
     }
+
 }

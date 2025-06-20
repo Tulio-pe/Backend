@@ -1,6 +1,6 @@
 package com.acme.tallerazo.iam.domain.model.aggregates;
 
-import com.acme.tallerazo.iam.domain.model.entities.Role;
+
 import com.acme.tallerazo.iam.domain.model.valueobjects.EmailAddress;
 import com.acme.tallerazo.iam.domain.model.valueobjects.Password;
 import com.acme.tallerazo.iam.domain.model.valueobjects.PersonName;
@@ -11,9 +11,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+
 
 @Getter
 @Setter
@@ -33,32 +31,19 @@ public class User extends AuditableAbstractAggregateRoot<User> {
     @Embedded
     @AttributeOverrides({@AttributeOverride(name="password", column = @Column(name="password_manager"))})
     private Password password;
-@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name="user_roles", joinColumns = @JoinColumn(name="user_id"),
-    inverseJoinColumns =  @JoinColumn(name="roles_id"))
-    private Set<Role> roles;
-    public User() {
-        this.roles = new HashSet<>();
-    }
-
-    public User(String username,String firstName, String lastName, String emailAddress, String password, List<Role> roles) {
+public String getStringEmail(){
+    return  emailAddress.value();
+}
+public User(){}
+    public User(String username,String firstName, String lastName, String emailAddress, String password) {
     this.personName=new PersonName(firstName,lastName);
     this.emailAddress= new EmailAddress(emailAddress);
     this.password= new Password(password);
     this.username=username;
-        this.roles = new HashSet<>();
 
     }
 
-    public User addRoles(Role role){
-    this.roles.add(role);
-    return this;
-    }
-    public User addRoles(List<Role> roles) {
-        var validatedRoleSet = Role.validateRoleSet(roles);
-        this.roles.addAll(validatedRoleSet);
-        return this;
-    }
+
 
     public Password getPassword() {
         return password;
