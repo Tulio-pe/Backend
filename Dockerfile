@@ -1,13 +1,13 @@
-# ------------ BUILD (JDK 21) ------------
-FROM maven:3.9.7-eclipse-temurin-21 AS build
+# ---- BUILD (JDK 24 EA) ----
+FROM maven:3.9.8-openjdk-24 AS build
 WORKDIR /app
 COPY pom.xml .
-RUN mvn -q dependency:resolve          # cache dependencias
+RUN mvn -q dependency:resolve
 COPY src ./src
 RUN mvn -q -DskipTests package          # genera target/*.jar
 
-# ------------ RUNTIME (JRE 21 Alpine) ------------
-FROM eclipse-temurin:21-jre-alpine
+# ---- RUNTIME ----
+FROM openjdk:24-ea-slim
 WORKDIR /app
 ENV PORT=8080
 EXPOSE 8080
