@@ -45,7 +45,21 @@ public class AuthenticationController {
         return ResponseEntity.ok(authenticatedUserResource);
     }
 
-
+    @PostMapping("/sign-in-email")
+    @Operation(summary="sign-in",description = "sign-in with emailAddress the provided credentials")
+    @ApiResponses(value={
+        @ApiResponse(responseCode = "200", description="User authenticated successfully."),
+        @ApiResponse(responseCode = "400",description="User not found")
+    })
+public ResponseEntity<AuthenticatedUserByEmailResource>SignInEmail(@RequestBody SignInEmailResource signInEmailResource) {
+        var SignInCommand= SignInCommandFromResourceAssembler.toCommandEmailFromResource(signInEmailResource);
+        var authenticatedUser=userCommandService.handle(SignInCommand);
+        if(authenticatedUser.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+        var authenticatedUserResource= AuthenticateUserByEmailResourceFromEntityAssembler.toResourceFromEntity(authenticatedUser.get().getLeft(),authenticatedUser.get().getRight());
+        return ResponseEntity.ok(authenticatedUserResource);
+}
 
     /**
      * Handles the sign-up request.
