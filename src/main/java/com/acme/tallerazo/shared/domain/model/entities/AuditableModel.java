@@ -8,6 +8,11 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.Date;
 
+/**
+* Clase base para entidades del dominio que requieren auditoría automática de fechas.
+* Proporciona ID auto-generado y timestamps automáticos para creación y modificación.
+*/
+
 @EntityListeners(AuditingEntityListener.class)
 @MappedSuperclass
 public class AuditableModel {
