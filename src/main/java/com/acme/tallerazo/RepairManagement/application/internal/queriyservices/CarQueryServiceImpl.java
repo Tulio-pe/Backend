@@ -9,7 +9,15 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-
+/**
+ * Delegates read-only car queries to {@link CarRepository}.
+ * <p>
+ *  Provee dos manejadores:
+ *  <ul>
+ *    <li>{@link #handle(GetAllCarQuery)} – devuelve todas las unidades registradas.</li>
+ *    <li>{@link #handle(GetCarByPlaceQuery)} – busca un auto por placa.</li>
+ *  </ul>
+ */
 @Service
 public class CarQueryServiceImpl implements CarQueryService {
     private final CarRepository carRepository;
