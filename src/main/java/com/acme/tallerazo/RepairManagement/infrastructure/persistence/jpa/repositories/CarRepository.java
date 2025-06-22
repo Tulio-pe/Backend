@@ -7,6 +7,12 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+/**
+* Define métodos personalizados específicos para el dominio de vehículos,
+* enfocándose en operaciones relacionadas con las placas de los vehículos.
+*/
+
+
 @Repository
 public interface CarRepository extends JpaRepository<Car,Long> {
     boolean existsByPlate(Plate plate);
