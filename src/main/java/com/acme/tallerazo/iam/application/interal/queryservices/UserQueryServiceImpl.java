@@ -11,9 +11,17 @@ import java.util.List;
 import java.util.Optional;
 
 /**
-* Servicio de consultas para el módulo IAM que implementa el patrón CQRS.
-* Maneja todas las operaciones de solo lectura relacionadas con usuarios.
-*/
+ * Delegates read-only user queries to {@link UserRepository}.
+ * <p>
+ *  Exposes three query handlers:
+ * <ul>
+ *   <li>{@link #handle(GetAllUsersQuery)} – obtiene la lista completa de usuarios.</li>
+ *   <li>{@link #handle(GetUserByIdQuery)} – busca un usuario por su ID.</li>
+ *   <li>{@link #handle(GetUserByUsernameQuery)} – busca un usuario por <em>username</em>.</li>
+ * </ul>
+ * <p>
+ *  Cada método devuelve el resultado tal cual lo provee {@code userRepository}.
+ */
 
 @Service
 public class UserQueryServiceImpl implements UserQueryService {
