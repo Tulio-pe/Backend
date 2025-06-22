@@ -9,6 +9,15 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+/**
+* Servicio de comando para la gestión de vehículos en el sistema Tallerazo.
+* Implementa la lógica de negocio para crear nuevos vehículos siguiendo el patrón CQRS.
+* 
+* Esta clase se encarga de:
+* - Validar que no existan vehículos duplicados por placa
+* - Crear nuevos registros de vehículos en el sistema
+* - Persistir la información del vehículo en la base de datos
+*/
 
 @Service
 public class CarCommandServiceImpl implements CarCommandService {
