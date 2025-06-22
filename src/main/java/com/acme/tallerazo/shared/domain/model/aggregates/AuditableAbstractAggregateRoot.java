@@ -9,6 +9,11 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.Date;
 
+/**
+* Clase base abstracta para todos los agregados del dominio con capacidades de auditoría automática.
+* Combina funcionalidades de Domain Events (DDD) con auditoría de fechas de creación y modificación.
+*/
+
 @Getter
 @EntityListeners(AuditingEntityListener.class)
 @MappedSuperclass
