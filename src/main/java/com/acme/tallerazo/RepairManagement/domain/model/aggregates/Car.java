@@ -7,7 +7,25 @@ import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
-
+/**
+ * Domain aggregate root that represents a single car under repair management.
+ * <p>
+ * The entity is immutable from the outside: all state changes must be performed
+ * through commands/handlers at the application layer.
+ * Internally it embeds several value objects for strong typing and invariants:
+ * <ul>
+ *   <li>{@link Brand}</li>
+ *   <li>{@link Model}</li>
+ *   <li>{@link Plate}</li>
+ *   <li>{@link FuelType}</li>
+ *   <li>{@link Year}</li>
+ *   <li>{@link WorkshopId}</li>
+ * </ul>
+ *
+ * <p><b>Persistence-mapping:</b> each value object is stored as an embedded
+ * component; column names are overridden to keep the DB schema explicit and
+ * readable.</p>
+ */
 @Entity
 public class Car extends AuditableAbstractAggregateRoot<Car> {
     @Embedded
