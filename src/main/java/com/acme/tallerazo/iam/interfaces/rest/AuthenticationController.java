@@ -2,14 +2,8 @@ package com.acme.tallerazo.iam.interfaces.rest;
 
 
 import com.acme.tallerazo.iam.domain.services.UserCommandService;
-import com.acme.tallerazo.iam.interfaces.rest.resources.AuthenticatedUserResource;
-import com.acme.tallerazo.iam.interfaces.rest.resources.SignInResource;
-import com.acme.tallerazo.iam.interfaces.rest.resources.SignUpResource;
-import com.acme.tallerazo.iam.interfaces.rest.resources.UserResource;
-import com.acme.tallerazo.iam.interfaces.rest.transform.AuthenticatedUserResourceFromEntityAssembler;
-import com.acme.tallerazo.iam.interfaces.rest.transform.SignInCommandFromResourceAssembler;
-import com.acme.tallerazo.iam.interfaces.rest.transform.SignUpCommandFromResourceAssembler;
-import com.acme.tallerazo.iam.interfaces.rest.transform.UserResourceFromEntityAssembler;
+import com.acme.tallerazo.iam.interfaces.rest.resources.*;
+import com.acme.tallerazo.iam.interfaces.rest.transform.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -50,6 +44,22 @@ public class AuthenticationController {
         var authenticatedUserResource = AuthenticatedUserResourceFromEntityAssembler.toResourceFromEntity(authenticatedUser.get().getLeft(), authenticatedUser.get().getRight());
         return ResponseEntity.ok(authenticatedUserResource);
     }
+
+@PostMapping("/sign-in-email")
+@Operation(summary="sign-in",description = "sign-in with emailAddress the provided credentials")
+@ApiResponses(value={
+        @ApiResponse(responseCode = "200", description="User authenticated successfully."),
+        @ApiResponse(responseCode = "400",description="User not found")
+})
+public ResponseEntity<AuthenticatedUserByEmailResource>SignInEmail(@RequestBody SignInEmailResource signInEmailResource) {
+        var SignInCommand= SignInCommandFromResourceAssembler.toCommandEmailFromResource(signInEmailResource);
+        var authenticatedUser=userCommandService.handle(SignInCommand);
+        if(authenticatedUser.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+        var authenticatedUserResource= AuthenticateUserByEmailResourceFromEntityAssembler.toResourceFromEntity(authenticatedUser.get().getLeft(),authenticatedUser.get().getRight());
+        return ResponseEntity.ok(authenticatedUserResource);
+}
 
     /**
      * Handles the sign-up request.
