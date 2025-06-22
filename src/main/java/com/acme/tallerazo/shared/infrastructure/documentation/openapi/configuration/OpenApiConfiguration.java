@@ -12,6 +12,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+* Configuración de OpenAPI/Swagger para la documentación automática de la API REST.
+* Define metadatos de la aplicación y configuración de seguridad JWT para Swagger UI.
+*/
+
 @Configuration
 public class OpenApiConfiguration {
     // Properties
