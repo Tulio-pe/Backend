@@ -9,24 +9,30 @@ import com.acme.tallerazo.iam.infrastructure.persistence.jpa.repositories.UserRe
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
+
+/**
+* Servicio de consultas para el módulo IAM que implementa el patrón CQRS.
+* Maneja todas las operaciones de solo lectura relacionadas con usuarios.
+*/
+
 @Service
 public class UserQueryServiceImpl implements UserQueryService {
 private final UserRepository userRepository;
 public UserQueryServiceImpl(UserRepository userRepository) {
     this.userRepository = userRepository;
 }
-
+ // Obtiene la lista completa de todos los usuarios del sistema
     @Override
     public List<User> handle(GetAllUsersQuery query) {
         return userRepository.findAll();
     }
-
+   // Busca un usuario específico por su ID único
     @Override
     public Optional<User> handle(GetUserByIdQuery query) {
          return userRepository.findById(query.id());
     }
 
-
+   // Busca un usuario por su nombre de usuario (username)
     @Override
     public Optional<User> handle(GetUserByUsernameQuery query) {
         return userRepository.findByUsername(query.username());
