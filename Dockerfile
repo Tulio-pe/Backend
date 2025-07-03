@@ -1,15 +1,21 @@
-# Use the Eclipse temurin alpine official image
-# https://hub.docker.com/_/eclipse-temurin
+# Usa Temurin JDK 24 en Alpine (u otra variante que prefieras)
 FROM eclipse-temurin:24-jdk-alpine
 
-# Create and change to the app directory.
+# Crea y entra al directorio de la app
 WORKDIR /app
 
-# Copy local code to the container image.
-COPY . ./
+# Copia todo el proyecto (incluye mvnw y .mvn/)
+COPY . .
 
-# Build the app.
-RUN ./mvnw -DoutputFile=target/mvn-dependency-list.log -B -DskipTests clean dependency:list install
+# Asegura permisos de ejecución en el Maven Wrapper
+RUN chmod +x mvnw
 
-# Run the app by dynamically finding the JAR file in the target directory
+# Construye la app
+RUN ./mvnw \
+      -DoutputFile=target/mvn-dependency-list.log \
+      -B \
+      -DskipTests \
+      clean dependency:list install
+
+# Al arrancar, busca dinámicamente el JAR en target/
 CMD ["sh", "-c", "java -jar target/*.jar"]
