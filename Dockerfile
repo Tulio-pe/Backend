@@ -17,7 +17,7 @@ RUN ./mvnw dependency:go-offline -B
 # Build con logging detallado
 RUN ./mvnw clean package -DskipTests -B -e -X
 
-FROM eclipse-temurin:24-jre-jammy
+FROM eclipse-temurin:24-jre
 WORKDIR /app
 COPY --from=builder /app/target/*.jar app.jar
 EXPOSE 8080
