@@ -6,7 +6,7 @@ RUN apt-get update \
  && sed -i 's/\r$//' mvnw \
  && chmod +x mvnw
 
-RUN ./mvnw clean package -DskipTests -B
+RUN ./mvnw clean package -DskipTests
 
 FROM eclipse-temurin:24-jre
 WORKDIR /app
