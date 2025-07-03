@@ -62,7 +62,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
-            <version>3.3.0</version> <!-- Primera versión con soporte para Java 22 -->
+            <version>3.3.1</version> <!-- Primera versión con soporte para Java 22 -->
             <scope>test</scope>
         </dependency>
         <dependency>
