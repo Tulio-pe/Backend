@@ -6,7 +6,8 @@ RUN apt-get update \
  && sed -i 's/\r$//' mvnw \
  && chmod +x mvnw
 
-RUN ./mvnw clean package -DskipTests
+ENV MAVEN_OPTS="-Xmx512m"
+RUN ./mvnw clean package -DskipTests -B -e
 
 FROM eclipse-temurin:24-jre
 WORKDIR /app
