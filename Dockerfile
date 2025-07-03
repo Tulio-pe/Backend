@@ -6,6 +6,8 @@ RUN apt-get update \
  && sed -i 's/\r$//' mvnw \
  && chmod +x mvnw
 
+RUN ./mvnw clean package -DskipTests -B
+
 FROM eclipse-temurin:24-jre
 WORKDIR /app
 COPY --from=builder /app/target/*.jar app.jar
