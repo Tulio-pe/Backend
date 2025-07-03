@@ -1,24 +1,15 @@
-FROM eclipse-temurin:22-jdk AS builder
+# Use the Eclipse temurin alpine official image
+# https://hub.docker.com/_/eclipse-temurin
+FROM eclipse-temurin:24-jdk-alpine
 
+# Create and change to the app directory.
 WORKDIR /app
-COPY . .
 
+# Copy local code to the container image.
+COPY . ./
 
-# Configuración mejorada del wrapper
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends curl ca-certificates && \
-    # Normaliza todos los scripts
-    find . -type f -name "mvnw" -o -name "*.sh" -exec sed -i 's/\r$//' {} \; && \
-    chmod +x mvnw && \
-    # Verifica el ambiente
-    ./mvnw --version && \
-    java -version
+# Build the app.
+RUN ./mvnw -DoutputFile=target/mvn-dependency-list.log -B -DskipTests clean dependency:list install
 
-# Build con cache optimizado
-RUN ./mvnw clean package -DskipTests -B -e -Dmaven.test.skip=true
-
-FROM eclipse-temurin:22-jre
-WORKDIR /app
-COPY --from=builder /app/target/*.jar app.jar
-EXPOSE 8080
-ENTRYPOINT ["java","-jar","app.jar"]
+# Run the app by dynamically finding the JAR file in the target directory
+CMD ["sh", "-c", "java -jar target/*.jar"]
