@@ -38,8 +38,8 @@ public class OpenApiConfiguration {
                         .license(new License().name("Apache 2.0")
                                 .url("https://springdoc.org")))
                 .externalDocs(new ExternalDocumentation()
-                        .description("ACME Learning Platform wiki Documentation")
-                        .url("https://acme-learning-platform.wiki.github.io/docs"));
+                        .description("Tallerazo API Documentation")
+                        .url("https://tallerazo.wiki.github.io/docs"));
 
         // Add a security scheme
 

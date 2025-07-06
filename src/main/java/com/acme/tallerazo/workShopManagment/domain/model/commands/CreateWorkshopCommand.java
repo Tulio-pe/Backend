@@ -4,7 +4,7 @@ import com.acme.tallerazo.workShopManagment.domain.model.entities.Service;
 
 import java.util.List;
 
-public record SignUpCommand(
+public record CreateWorkshopCommand(
         String workshopName,
         String workshopPhone,
         String workshopAddress,

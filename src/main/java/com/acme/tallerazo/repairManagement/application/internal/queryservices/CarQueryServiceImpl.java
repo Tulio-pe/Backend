@@ -1,4 +1,4 @@
-package com.acme.tallerazo.repairManagement.application.internal.queriyservices;
+package com.acme.tallerazo.repairManagement.application.internal.queryservices;
 
 import com.acme.tallerazo.repairManagement.domain.model.Queries.GetAllCarQuery;
 import com.acme.tallerazo.repairManagement.domain.model.Queries.GetCarByPlaceQuery;

@@ -10,8 +10,5 @@ import java.util.Optional;
 @Repository
 public interface WorkshopRepository extends JpaRepository<Workshop,Long> {
     boolean existsByWorkshopName(WorkshopName name);
-
     Optional<Workshop> findByWorkshopName(WorkshopName name);
-
-
 }

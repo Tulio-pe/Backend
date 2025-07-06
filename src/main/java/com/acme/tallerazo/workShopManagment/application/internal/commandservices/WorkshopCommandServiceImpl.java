@@ -5,7 +5,7 @@ import com.acme.tallerazo.workShopManagment.domain.services.WorkshopCommandServi
 import com.acme.tallerazo.workShopManagment.infrastructure.persistence.jpa.repositories.ServiceRepository;
 import com.acme.tallerazo.workShopManagment.infrastructure.persistence.jpa.repositories.WorkshopRepository;
 import org.springframework.stereotype.Service;
-import  com.acme.tallerazo.workShopManagment.domain.model.commands.SignUpCommand;
+import com.acme.tallerazo.workShopManagment.domain.model.commands.CreateWorkshopCommand;
 import java.util.Optional;
 
 @Service
@@ -17,7 +17,7 @@ public class WorkshopCommandServiceImpl implements WorkshopCommandService {
         this.serviceRepository=serviceRepository;
     }
     @Override
-    public Optional<Workshop> handle(SignUpCommand command) {
+    public Optional<Workshop> handle(CreateWorkshopCommand command) {
          var workshopName=new WorkshopName(command.workshopName());
         if (workshopRepository.existsByWorkshopName(workshopName))
         { throw new RuntimeException("workshop with name %s already exists".formatted(command.workshopName())); }

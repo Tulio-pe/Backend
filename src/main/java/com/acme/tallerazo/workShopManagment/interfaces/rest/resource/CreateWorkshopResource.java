@@ -2,7 +2,7 @@ package com.acme.tallerazo.workShopManagment.interfaces.rest.resource;
 
 import java.util.List;
 
-public record WorkshopSignUpResource(String workshopName,
+public record CreateWorkshopResource(String workshopName,
                                      String workshopPhone,
                                      String workshopAddress,
                                      String Email,
