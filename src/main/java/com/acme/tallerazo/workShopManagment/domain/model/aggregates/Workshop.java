@@ -34,11 +34,16 @@ public class Workshop extends AuditableAbstractAggregateRoot<Workshop> {
     private Photo photo;
     @Embedded
     @AttributeOverrides({
-            @AttributeOverride(name="description", column = @Column(name="Workshop_description"))
+            @AttributeOverride(name="description", column = @Column(name="workshop_description"))
     })
     private WorkshopDescription description;
     @Embedded
-    private Manager_id manager_id;
+    @AttributeOverride(
+            name  = "managerId",
+            column = @Column(name = "manager_id", nullable = false)
+    )
+    private ManagerId managerId;
+
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name="workshop_services",joinColumns =@JoinColumn(name="workshop_id"),
             inverseJoinColumns = @JoinColumn(name="services_id"))
@@ -55,7 +60,7 @@ public class Workshop extends AuditableAbstractAggregateRoot<Workshop> {
 
     public Workshop(){this.services = new HashSet<>();}
 
-    public Workshop(String workshopName, String workshopPhone, String workshopAddress, String workshopEmail,String photo, String workshopDescription) {
+    public Workshop(String workshopName, String workshopPhone, String workshopAddress, String workshopEmail,String photo, String workshopDescription, Long managerId) {
         this.workshopName = new WorkshopName(workshopName);
         this.workshopPhone = new WorkshopPhone(workshopPhone);
         this.workshopAddress=new WorkshopAddress(workshopAddress);
@@ -63,9 +68,10 @@ public class Workshop extends AuditableAbstractAggregateRoot<Workshop> {
         this.photo=new Photo(photo);
         this.description=new WorkshopDescription(workshopDescription);
         this.services=new HashSet<>();
+        this.managerId=new ManagerId(managerId);
     }
-    public Workshop(String workshopName, String workshopPhone, String workshopAddress, String workshopEmail, String photo, String workshopDescription, List<Service>services){
-        this(workshopName,workshopPhone,workshopAddress,workshopEmail,photo,workshopDescription);
+    public Workshop(String workshopName, String workshopPhone, String workshopAddress, String workshopEmail, String photo, String workshopDescription, Long managerId, List<Service>services){
+        this(workshopName,workshopPhone,workshopAddress,workshopEmail,photo,workshopDescription,managerId);
         addServices(services);
     }
 

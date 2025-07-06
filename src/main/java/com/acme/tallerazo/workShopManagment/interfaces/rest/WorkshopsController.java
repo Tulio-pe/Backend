@@ -57,9 +57,9 @@ public class WorkshopsController {
             @ApiResponse(responseCode = "201", description = "Workshop created successfully"),
             @ApiResponse(responseCode = "400", description = "Bad Request")
     })
-    public ResponseEntity<WorkshopResource>signUp(@RequestBody CreateWorkshopResource signUpResource){
-        var SignUpCommand = CreateWorkshopCommandFromResourceAssembler.toCommandFromResource(signUpResource);
-        var workshop=workshopcommandService.handle(SignUpCommand);
+    public ResponseEntity<WorkshopResource>signUp(@RequestBody CreateWorkshopResource createWorkshopResource){
+        var createWorkshopCommand = CreateWorkshopCommandFromResourceAssembler.toCommandFromResource(createWorkshopResource);
+        var workshop=workshopcommandService.handle(createWorkshopCommand);
 
         if(workshop.isEmpty()){
             return ResponseEntity.badRequest().build();

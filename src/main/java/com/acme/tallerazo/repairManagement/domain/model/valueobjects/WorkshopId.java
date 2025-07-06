@@ -4,4 +4,10 @@ import jakarta.persistence.Embeddable;
 
 @Embeddable
 public record WorkshopId(Long workshopId) {
+    /**
+     * Default constructor
+     */
+    public WorkshopId() {
+        this(null);
+    }
 }

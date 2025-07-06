@@ -10,7 +10,8 @@ public class CreateCarCommandFromResourceAssembler {
                 resource.model(),
                 resource.licensePlate(),
                 resource.fuelType(),
-                resource.Year()
+                resource.year(),
+                resource.workshopId()
         );
     }
 }

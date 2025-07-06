@@ -5,8 +5,9 @@ import java.util.List;
 public record CreateWorkshopResource(String workshopName,
                                      String workshopPhone,
                                      String workshopAddress,
-                                     String Email,
+                                     String email,
                                      String photo,
-                                     String Description,
+                                     String description,
+                                     Long managerId,
                                      List<String> services) {
 }

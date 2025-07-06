@@ -6,7 +6,6 @@ import com.acme.tallerazo.workShopManagment.domain.model.commands.CreateWorkshop
 import java.util.Optional;
 
 public interface WorkshopCommandService {
-
-    Optional<Workshop>handle(CreateWorkshopCommand command) ;
+    Optional<Workshop>handle(CreateWorkshopCommand command);
 
 }

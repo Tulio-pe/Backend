@@ -8,10 +8,9 @@ public record CreateWorkshopCommand(
         String workshopName,
         String workshopPhone,
         String workshopAddress,
-        String Email,
+        String email,
         String photo,
-        String Description,
+        String description,
+        Long managerId,
         List<Service> services) {
-
-
 }

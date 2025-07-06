@@ -8,6 +8,6 @@ import com.acme.tallerazo.workShopManagment.interfaces.rest.resource.WorkshopRes
 public class WorkshopResourceFromEntityAssembler {
     public static WorkshopResource ToResourceFromEntity(Workshop workshop){
         var services=workshop.getServices().stream().map(Service::getStringName).toList();
-   return new WorkshopResource (workshop.getWorkshopName(),workshop.getWorkshopAddress(),workshop.getWorkshopPhone(),workshop.getPhoto(),workshop.getDescription(),services);
+   return new WorkshopResource (workshop.getWorkshopName(),workshop.getWorkshopAddress(),workshop.getWorkshopPhone(),workshop.getPhoto(),workshop.getDescription(), services);
     }
 }
