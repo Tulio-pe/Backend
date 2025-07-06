@@ -10,7 +10,6 @@ import jakarta.persistence.Entity;
 import lombok.Getter;
 
 @Entity
-@Getter
 public class Car extends AuditableAbstractAggregateRoot<Car> {
     @Embedded
     @AttributeOverride(name="brand",column = @Column(name="car_brand"))
@@ -49,6 +48,10 @@ public class Car extends AuditableAbstractAggregateRoot<Car> {
             this.year= new Year(command.year());
             this.workshopId= new WorkshopId(command.workshopId());
     }
+
+    public String getFuelType(){return this.fuelType.fuelType();}
+
+    public String getBrand(){return this.brand.brand();}
     /**
      * Returns the car's model.
      *
