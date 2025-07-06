@@ -1,6 +1,6 @@
 package com.acme.tallerazo.workShopManagment.domain.model.commands;
 
-import com.acme.tallerazo.workShopManagment.domain.model.entities.WorkshopAndService;
+import com.acme.tallerazo.workShopManagment.domain.model.entities.Service;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ public record SignUpCommand(
         String Email,
         String photo,
         String Description,
-        List<WorkshopAndService> services) {
+        List<Service> services) {
 
 
 }
