@@ -23,7 +23,7 @@ public class Workshop extends AuditableAbstractAggregateRoot<Workshop> {
     @AttributeOverrides({
             @AttributeOverride(name = "address",column = @Column(name="workshop_address",unique=true)),}
     )
-    private WorkshopAddress workshopAddress;
+    private WorkshopLocation workshopLocation;
     @Embedded
     @AttributeOverrides({
             @AttributeOverride(name = "value",column = @Column(name="workshop_email",unique=true)),}
@@ -49,21 +49,13 @@ public class Workshop extends AuditableAbstractAggregateRoot<Workshop> {
             inverseJoinColumns = @JoinColumn(name="services_id"))
     private Set<Service>services;
 
-    public String getWorkshopName(){
-        return workshopName.workshopName();
-    }
-
-    public String getWorkshopAddress(){return workshopAddress.address();}
-    public String getWorkshopPhone(){return workshopPhone.workshopPhone();}
-    public String getPhoto(){return photo.photo();}
-    public String getDescription(){return description.description();}
 
     public Workshop(){this.services = new HashSet<>();}
 
     public Workshop(String workshopName, String workshopPhone, String workshopAddress, String workshopEmail,String photo, String workshopDescription, Long managerId) {
         this.workshopName = new WorkshopName(workshopName);
         this.workshopPhone = new WorkshopPhone(workshopPhone);
-        this.workshopAddress=new WorkshopAddress(workshopAddress);
+        this.workshopLocation =new WorkshopLocation(workshopAddress);
         this.workshopEmail=new WorkshopEmail(workshopEmail);
         this.photo=new Photo(photo);
         this.description=new WorkshopDescription(workshopDescription);
@@ -80,5 +72,67 @@ public class Workshop extends AuditableAbstractAggregateRoot<Workshop> {
         this.services.addAll(validateServiceSet);
         return this;
     }
+    //update schedule
 
+    //update workshop info
+
+    /**
+     * <summary>
+     * Retrieves the workshop’s name.
+     * </summary>
+     * <returns>
+     *   The name of the workshop.
+     * </returns>
+     */
+    public String getWorkshopName() {
+        return workshopName.workshopName();
+    }
+
+    /**
+     * <summary>
+     * Retrieves the workshop’s address.
+     * </summary>
+     * <returns>
+     *   The address of the workshop.
+     * </returns>
+     */
+    public String getWorkshopLocation() {
+        return workshopLocation.address();
+    }
+
+    /**
+     * <summary>
+     * Retrieves the workshop’s phone number.
+     * </summary>
+     * <returns>
+     *   The phone number of the workshop.
+     * </returns>
+     */
+    public String getWorkshopPhone() {
+        return workshopPhone.workshopPhone();
+    }
+
+    /**
+     * <summary>
+     * Retrieves the workshop’s photo URL or identifier.
+     * </summary>
+     * <returns>
+     *   The photo reference of the workshop.
+     * </returns>
+     */
+    public String getPhoto() {
+        return photo.photo();
+    }
+
+    /**
+     * <summary>
+     * Retrieves the workshop’s description.
+     * </summary>
+     * <returns>
+     *   A textual description of the workshop.
+     * </returns>
+     */
+    public String getDescription() {
+        return description.description();
+    }
 }
