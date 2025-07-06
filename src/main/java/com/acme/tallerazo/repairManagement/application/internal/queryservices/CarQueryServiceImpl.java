@@ -1,6 +1,6 @@
 package com.acme.tallerazo.repairManagement.application.internal.queryservices;
 
-import com.acme.tallerazo.repairManagement.domain.model.Queries.GetAllCarQuery;
+import com.acme.tallerazo.repairManagement.domain.model.Queries.GetAllCarsQuery;
 import com.acme.tallerazo.repairManagement.domain.model.Queries.GetCarByPlaceQuery;
 import com.acme.tallerazo.repairManagement.domain.model.aggregates.Car;
 import com.acme.tallerazo.repairManagement.domain.services.CarQueryService;
@@ -18,7 +18,7 @@ public class CarQueryServiceImpl implements CarQueryService {
     }
 
     @Override
-    public List<Car> handle(GetAllCarQuery query) {
+    public List<Car> handle(GetAllCarsQuery query) {
         return carRepository.findAll();
     }
 

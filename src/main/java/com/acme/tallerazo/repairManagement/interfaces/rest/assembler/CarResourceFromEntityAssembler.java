@@ -5,7 +5,7 @@ import com.acme.tallerazo.repairManagement.interfaces.rest.resource.CarResource;
 
 public class CarResourceFromEntityAssembler {
     public static CarResource toResourceFromEntity(Car car){
-     return new CarResource(car.getPlate(),car.getModel(),car.getYear());
+     return new CarResource(car.getId(),car.getBrand().brand(), car.getModel(), car.getPlate(),car.getYear());
 
     }
 }

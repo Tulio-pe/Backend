@@ -7,8 +7,10 @@ import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import lombok.Getter;
 
 @Entity
+@Getter
 public class Car extends AuditableAbstractAggregateRoot<Car> {
     @Embedded
     @AttributeOverride(name="brand",column = @Column(name="car_brand"))
