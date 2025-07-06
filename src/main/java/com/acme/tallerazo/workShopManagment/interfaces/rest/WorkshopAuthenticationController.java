@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 
-@RequestMapping(value="api/v1/Authentication-Workshop", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value="api/v1/kshop", produces = MediaType.APPLICATION_JSON_VALUE)
 @Controller
-@Tag(name="WorkshopRegistration", description = "Available endpoints for workshop registration")
+@Tag(name="WorkshopManagement", description = "Available endpoints for workshop registration")
 public class WorkshopAuthenticationController {
     private final WorkshopCommandService workshopcommandService;
     public WorkshopAuthenticationController(WorkshopCommandService workshopcommandService){
@@ -28,7 +28,7 @@ public class WorkshopAuthenticationController {
     }
 
     @PostMapping("/sign-up")
-    @Operation(summary = "Sign-up", description = "Sign.up with the provided credentials")
+    @Operation(summary = "Sign-up", description = "Sign up with the provided credentials")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Workshop created successfully"),
             @ApiResponse(responseCode = "400", description = "Bad Request")

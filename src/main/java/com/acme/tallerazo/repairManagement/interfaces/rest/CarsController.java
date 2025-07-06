@@ -26,7 +26,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping(value="api/v1/cars", produces = MediaType.APPLICATION_JSON_VALUE)
-@Tag(name="cars", description = "Available Cars EndPoint ")
+@Tag(name="Cars", description = "Available Cars EndPoint ")
 public class CarsController {
     private final CarCommandService carCommandService;
     private final CarQueryService carQueryService;
