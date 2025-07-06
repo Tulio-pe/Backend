@@ -34,7 +34,7 @@ public class WorkshopCommandServiceImpl implements WorkshopCommandService {
     }
     /**
      * <summary>
-     * Processes the CreateWorkshopCommand to create and persist a new Workshop.
+     * Processes the CreateWorkshopCommand to create and persist a new Workshop. Search for district and then add to it
      * </summary>
      * <param name="command">
      *   Command object containing all necessary data to create a Workshop.
@@ -49,6 +49,7 @@ public class WorkshopCommandServiceImpl implements WorkshopCommandService {
      */
     @Override
     public Optional<Workshop> handle(CreateWorkshopCommand command) {
+        //validate if district exist, then create location and pass it
          var workshopName=new WorkshopName(command.workshopName());
         if (workshopRepository.existsByWorkshopName(workshopName))
         { throw new RuntimeException("workshop with name %s already exists".formatted(command.workshopName())); }

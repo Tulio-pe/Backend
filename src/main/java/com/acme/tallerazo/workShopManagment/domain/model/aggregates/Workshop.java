@@ -20,9 +20,6 @@ public class Workshop extends AuditableAbstractAggregateRoot<Workshop> {
     @Embedded
         private WorkshopPhone workshopPhone;
     @Embedded
-    @AttributeOverrides({
-            @AttributeOverride(name = "address",column = @Column(name="workshop_address",unique=true)),}
-    )
     private WorkshopLocation workshopLocation;
     @Embedded
     @AttributeOverrides({
@@ -49,21 +46,20 @@ public class Workshop extends AuditableAbstractAggregateRoot<Workshop> {
             inverseJoinColumns = @JoinColumn(name="services_id"))
     private Set<Service>services;
 
-
     public Workshop(){this.services = new HashSet<>();}
 
-    public Workshop(String workshopName, String workshopPhone, String workshopAddress, String workshopEmail,String photo, String workshopDescription, Long managerId) {
+    public Workshop(String workshopName, String workshopPhone, WorkshopLocation workshopLocation, String workshopEmail,String photo, String workshopDescription, Long managerId) {
         this.workshopName = new WorkshopName(workshopName);
         this.workshopPhone = new WorkshopPhone(workshopPhone);
-        this.workshopLocation =new WorkshopLocation(workshopAddress);
+        this.workshopLocation = workshopLocation;
         this.workshopEmail=new WorkshopEmail(workshopEmail);
         this.photo=new Photo(photo);
         this.description=new WorkshopDescription(workshopDescription);
         this.services=new HashSet<>();
         this.managerId=new ManagerId(managerId);
     }
-    public Workshop(String workshopName, String workshopPhone, String workshopAddress, String workshopEmail, String photo, String workshopDescription, Long managerId, List<Service>services){
-        this(workshopName,workshopPhone,workshopAddress,workshopEmail,photo,workshopDescription,managerId);
+    public Workshop(String workshopName, String workshopPhone, WorkshopLocation workshopLocation, String workshopEmail, String photo, String workshopDescription, Long managerId, List<Service>services){
+        this(workshopName,workshopPhone,workshopLocation,workshopEmail,photo,workshopDescription,managerId);
         addServices(services);
     }
 
@@ -96,8 +92,8 @@ public class Workshop extends AuditableAbstractAggregateRoot<Workshop> {
      *   The address of the workshop.
      * </returns>
      */
-    public String getWorkshopLocation() {
-        return workshopLocation.address();
+    public String getWorkshopAddress() {
+        return workshopLocation.getAddress();
     }
 
     /**

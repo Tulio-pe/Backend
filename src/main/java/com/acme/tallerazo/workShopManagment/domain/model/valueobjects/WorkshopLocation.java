@@ -1,18 +1,23 @@
 package com.acme.tallerazo.workShopManagment.domain.model.valueobjects;
 
-import jakarta.persistence.Embeddable;
+import com.acme.tallerazo.workShopManagment.domain.model.entities.District;
+import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Embeddable
-public record WorkshopLocation(String address, District districtId ) {
-    public WorkshopLocation(){
-        this(null,null);
-    }
-    public WorkshopLocation {
-        if(address == null||address.isBlank() ){
-            throw new IllegalArgumentException("Workshop address cannot be null or blank");
-        }
-        if(districtId == null){
-            throw new IllegalArgumentException("District ID cannot be null");
-        }
-    }
+@Data
+@NoArgsConstructor
+public class WorkshopLocation {
+
+    @Column(name = "workshop_address", nullable = false)
+    private String address;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(
+            name = "district_id",
+            nullable = false,
+            foreignKey = @ForeignKey(name = "fk_workshop_district")
+    )
+    private District district;
 }
