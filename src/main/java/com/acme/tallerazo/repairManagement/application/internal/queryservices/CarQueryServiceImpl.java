@@ -1,5 +1,6 @@
 package com.acme.tallerazo.repairManagement.application.internal.queryservices;
 
+import com.acme.tallerazo.repairManagement.domain.exceptions.PlateNotFoundException;
 import com.acme.tallerazo.repairManagement.domain.model.queries.GetAllCarsQuery;
 import com.acme.tallerazo.repairManagement.domain.model.queries.GetCarByPlaceQuery;
 import com.acme.tallerazo.repairManagement.domain.model.aggregates.Car;
@@ -24,7 +25,7 @@ public class CarQueryServiceImpl implements CarQueryService {
 
     @Override
     public Optional<Car> handle(GetCarByPlaceQuery query) {
-        if(!carRepository.existsByPlate(query.plate())){throw new IllegalArgumentException("plate not found");
+        if(!carRepository.existsByPlate(query.plate())){throw new PlateNotFoundException(query.plate().plate());
         }
         return carRepository.findByPlate(query.plate());
 

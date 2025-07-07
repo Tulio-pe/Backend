@@ -1,28 +1,31 @@
 package com.acme.tallerazo.iam.domain.model.valueobjects;
 
+import com.acme.tallerazo.iam.domain.exceptions.*;
 import jakarta.persistence.Embeddable;
 
+/**
+ * Value object representing a secure user password.
+ */
 @Embeddable
 public record Password(String password) {
     public Password {
         if (password == null || password.isBlank()) {
-            throw new IllegalArgumentException("Password cannot be null or blank");
+            throw new PasswordBlankException();
         }
         if (password.length() < 8) {
-            throw new IllegalArgumentException("Password must be at least 8 characters long");
+            throw new PasswordTooShortException();
         }
         if (!password.matches(".*[A-Z].*")) {
-            throw new IllegalArgumentException("Password must contain at least one uppercase letter");
+            throw new PasswordMissingUppercaseException();
         }
         if (!password.matches(".*[a-z].*")) {
-            throw new IllegalArgumentException("Password must contain at least one lowercase letter");
+            throw new PasswordMissingLowercaseException();
         }
         if (!password.matches(".*\\d.*")) {
-            throw new IllegalArgumentException("Password must contain at least one number");
+            throw new PasswordMissingNumberException();
         }
         if (!password.matches(".*[^a-zA-Z0-9].*")) {
-            throw new IllegalArgumentException("Password must contain at least one special character");
+            throw new PasswordMissingSpecialCharacterException();
         }
     }
 }
-
