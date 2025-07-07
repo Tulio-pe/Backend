@@ -7,5 +7,4 @@ import java.util.Optional;
 
 public interface WorkshopCommandService {
     Optional<Workshop>handle(CreateWorkshopCommand command);
-
 }

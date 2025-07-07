@@ -12,5 +12,6 @@ public record CreateWorkshopCommand(
         String photo,
         String description,
         Long managerId,
+        Long districtId,
         List<Service> services) {
 }

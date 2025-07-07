@@ -26,7 +26,6 @@ public class WorkshopsController {
     private final  WorkshopQueryService workshopQueryservice;
     private final  WorkshopCommandService workshopcommandService;
 
-
      public WorkshopsController(WorkshopQueryService workshopQueryservice, WorkshopCommandService workshopcommandService){
          this.workshopQueryservice=workshopQueryservice;
          this.workshopcommandService = workshopcommandService;
@@ -48,7 +47,6 @@ public class WorkshopsController {
          var workshopResource=
          WorkshopResourceFromEntityAssembler.ToResourceFromEntity((workshopEntity));
          return ResponseEntity.ok(workshopResource);
-
      }
 
     @PostMapping("/")
@@ -57,7 +55,7 @@ public class WorkshopsController {
             @ApiResponse(responseCode = "201", description = "Workshop created successfully"),
             @ApiResponse(responseCode = "400", description = "Bad Request")
     })
-    public ResponseEntity<WorkshopResource>signUp(@RequestBody CreateWorkshopResource createWorkshopResource){
+    public ResponseEntity<WorkshopResource>createWorkshop(@RequestBody CreateWorkshopResource createWorkshopResource){
         var createWorkshopCommand = CreateWorkshopCommandFromResourceAssembler.toCommandFromResource(createWorkshopResource);
         var workshop=workshopcommandService.handle(createWorkshopCommand);
 

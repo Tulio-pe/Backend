@@ -9,5 +9,6 @@ public record CreateWorkshopResource(String workshopName,
                                      String photo,
                                      String description,
                                      Long managerId,
+                                     Long districtId,
                                      List<String> services) {
 }

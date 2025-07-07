@@ -1,7 +1,7 @@
 package com.acme.tallerazo.repairManagement.domain.services;
 
-import com.acme.tallerazo.repairManagement.domain.model.Queries.GetAllCarsQuery;
-import com.acme.tallerazo.repairManagement.domain.model.Queries.GetCarByPlaceQuery;
+import com.acme.tallerazo.repairManagement.domain.model.queries.GetAllCarsQuery;
+import com.acme.tallerazo.repairManagement.domain.model.queries.GetCarByPlaceQuery;
 import com.acme.tallerazo.repairManagement.domain.model.aggregates.Car;
 
 import java.util.List;

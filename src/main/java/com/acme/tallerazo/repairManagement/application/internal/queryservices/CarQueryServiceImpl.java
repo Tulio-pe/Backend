@@ -1,7 +1,7 @@
 package com.acme.tallerazo.repairManagement.application.internal.queryservices;
 
-import com.acme.tallerazo.repairManagement.domain.model.Queries.GetAllCarsQuery;
-import com.acme.tallerazo.repairManagement.domain.model.Queries.GetCarByPlaceQuery;
+import com.acme.tallerazo.repairManagement.domain.model.queries.GetAllCarsQuery;
+import com.acme.tallerazo.repairManagement.domain.model.queries.GetCarByPlaceQuery;
 import com.acme.tallerazo.repairManagement.domain.model.aggregates.Car;
 import com.acme.tallerazo.repairManagement.domain.services.CarQueryService;
 import com.acme.tallerazo.repairManagement.infrastructure.persistence.jpa.repositories.CarRepository;

@@ -1,7 +1,10 @@
 package com.acme.tallerazo.workShopManagment.application.internal.commandservices;
 import com.acme.tallerazo.workShopManagment.domain.model.aggregates.Workshop;
+import com.acme.tallerazo.workShopManagment.domain.model.valueobjects.WorkshopLocation;
 import com.acme.tallerazo.workShopManagment.domain.model.valueobjects.WorkshopName;
+import com.acme.tallerazo.workShopManagment.domain.services.DistrictQueryService;
 import com.acme.tallerazo.workShopManagment.domain.services.WorkshopCommandService;
+import com.acme.tallerazo.workShopManagment.infrastructure.persistence.jpa.repositories.DistrictRepository;
 import com.acme.tallerazo.workShopManagment.infrastructure.persistence.jpa.repositories.ServiceRepository;
 import com.acme.tallerazo.workShopManagment.infrastructure.persistence.jpa.repositories.WorkshopRepository;
 import org.springframework.stereotype.Service;
@@ -17,6 +20,8 @@ import java.util.Optional;
 public class WorkshopCommandServiceImpl implements WorkshopCommandService {
     private final WorkshopRepository workshopRepository;
     private final ServiceRepository serviceRepository;
+    private final DistrictRepository districtRepository;
+
     /**
      * <summary>
      * Constructs a new instance of WorkshopCommandServiceImpl.
@@ -28,9 +33,10 @@ public class WorkshopCommandServiceImpl implements WorkshopCommandService {
      *   Repository for looking up and validating Service objects.
      * </param>
      */
-    public WorkshopCommandServiceImpl(WorkshopRepository workshopRepository, ServiceRepository serviceRepository){
+    public WorkshopCommandServiceImpl(WorkshopRepository workshopRepository, ServiceRepository serviceRepository, DistrictRepository districtRepository){
         this.workshopRepository=workshopRepository;
         this.serviceRepository=serviceRepository;
+        this.districtRepository = districtRepository;
     }
     /**
      * <summary>
@@ -46,18 +52,27 @@ public class WorkshopCommandServiceImpl implements WorkshopCommandService {
      *   Thrown if a Workshop with the same name already exists
      *   or if any referenced Service cannot be found.
      * </exception>
+     * <exception cref="RuntimeException">
+     *   Thrown if the Id passed doesn't exist
+     *   or if any referenced Service cannot be found.
+     * </exception>
      */
     @Override
     public Optional<Workshop> handle(CreateWorkshopCommand command) {
-        //validate if district exist, then create location and pass it
-         var workshopName=new WorkshopName(command.workshopName());
+        var district = districtRepository.getDistrictById(command.districtId());
+        if(district == null) {
+            throw new RuntimeException("District not found");
+        }
+        var workshopName=new WorkshopName(command.workshopName());
         if (workshopRepository.existsByWorkshopName(workshopName))
         { throw new RuntimeException("workshop with name %s already exists".formatted(command.workshopName())); }
         var services = command.services().stream().map(role -> serviceRepository.findByName(role.getName()).orElseThrow(() -> new RuntimeException("service name not found"))).toList();
-        var workshop = new Workshop(command.workshopName(), command.workshopPhone(),command.workshopAddress(),command.email(),command.photo(),command.description(),command.managerId(),services);
+
+        WorkshopLocation location = new WorkshopLocation(command.workshopAddress(), district);
+
+        var workshop = new Workshop(command.workshopName(), command.workshopPhone(),location,command.email(),command.photo(),command.description(),command.managerId(),services);
 
         workshopRepository.save(workshop);
         return workshopRepository.findByWorkshopName(workshopName);
     }
-
 }

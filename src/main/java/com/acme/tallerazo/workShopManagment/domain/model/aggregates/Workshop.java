@@ -1,12 +1,14 @@
 package com.acme.tallerazo.workShopManagment.domain.model.aggregates;
 
 import com.acme.tallerazo.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
+import com.acme.tallerazo.workShopManagment.domain.model.entities.ScheduleEntry;
 import com.acme.tallerazo.workShopManagment.domain.model.entities.Service;
 import com.acme.tallerazo.workShopManagment.domain.model.valueobjects.*;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -45,6 +47,14 @@ public class Workshop extends AuditableAbstractAggregateRoot<Workshop> {
     @JoinTable(name="workshop_services",joinColumns =@JoinColumn(name="workshop_id"),
             inverseJoinColumns = @JoinColumn(name="services_id"))
     private Set<Service>services;
+
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    @JoinColumn(name = "workshop_id", nullable = false)
+    private List<ScheduleEntry> schedule = new ArrayList<>();
+
 
     public Workshop(){this.services = new HashSet<>();}
 

@@ -1,4 +1,4 @@
-package com.acme.tallerazo.repairManagement.domain.model.Queries;
+package com.acme.tallerazo.repairManagement.domain.model.queries;
 
 import com.acme.tallerazo.repairManagement.domain.model.valueobjects.Plate;
 

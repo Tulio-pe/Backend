@@ -9,6 +9,6 @@ import java.util.ArrayList;
 public class CreateWorkshopCommandFromResourceAssembler {
     public static CreateWorkshopCommand toCommandFromResource(CreateWorkshopResource resource){
         var services=resource.services()!=null? resource.services().stream().map(name -> Service.ToServiceFromName(name)).toList(): new ArrayList<Service>();
-        return new CreateWorkshopCommand(resource.workshopName(),resource.workshopPhone(),resource.workshopAddress(),resource.email(),resource.photo(),resource.description(),resource.managerId(), services);
+        return new CreateWorkshopCommand(resource.workshopName(),resource.workshopPhone(),resource.workshopAddress(),resource.email(),resource.photo(),resource.description(),resource.managerId(), resource.districtId(), services);
     }
 }

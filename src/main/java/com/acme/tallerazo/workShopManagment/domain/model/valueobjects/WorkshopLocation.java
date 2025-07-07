@@ -20,4 +20,10 @@ public class WorkshopLocation {
             foreignKey = @ForeignKey(name = "fk_workshop_district")
     )
     private District district;
+
+
+    public WorkshopLocation(String address, District district) {
+        this.address = address;
+        this.district = district;
+    }
 }

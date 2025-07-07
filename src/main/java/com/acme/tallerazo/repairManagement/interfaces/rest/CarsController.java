@@ -1,7 +1,7 @@
 package com.acme.tallerazo.repairManagement.interfaces.rest;
 
-import com.acme.tallerazo.repairManagement.domain.model.Queries.GetAllCarsQuery;
-import com.acme.tallerazo.repairManagement.domain.model.Queries.GetCarByPlaceQuery;
+import com.acme.tallerazo.repairManagement.domain.model.queries.GetAllCarsQuery;
+import com.acme.tallerazo.repairManagement.domain.model.queries.GetCarByPlaceQuery;
 import com.acme.tallerazo.repairManagement.domain.model.valueobjects.Plate;
 import com.acme.tallerazo.repairManagement.domain.services.CarCommandService;
 import com.acme.tallerazo.repairManagement.domain.services.CarQueryService;
