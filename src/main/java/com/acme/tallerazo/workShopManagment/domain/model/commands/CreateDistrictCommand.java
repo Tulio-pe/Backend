@@ -1,4 +1,6 @@
 package com.acme.tallerazo.workShopManagment.domain.model.commands;
 
-public record CreateDistrictCommand() {
+import com.acme.tallerazo.workShopManagment.domain.model.entities.Province;
+
+public record CreateDistrictCommand(String name, Long provinceId) {
 }

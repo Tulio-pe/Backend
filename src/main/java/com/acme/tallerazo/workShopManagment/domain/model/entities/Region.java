@@ -19,7 +19,8 @@ public class Region {
     @Column(name = "region_name", nullable = false)
     private String regionName;
 
-    public Region(String regionName) {
-        this.regionName = regionName;
+    public Region(String name) {
+        this.regionName = name;
     }
+
 }

@@ -23,7 +23,7 @@ private RepairId repairId;
     @Column(length = 20)
     private RepairOrderStatus status;
 
-     public String getStatus(){return this.status.name().toLowerCase();}
+    public String getStatus(){return this.status.name().toLowerCase();}
 
    public RepairOrder(){}
     public RepairOrder(Car car,CreateRepairCommand command,RepairId repairId){

@@ -1,4 +1,4 @@
 package com.acme.tallerazo.workShopManagment.domain.model.commands;
 
-public record CreateRegionCommand() {
+public record CreateRegionCommand(String name) {
 }
