@@ -1,6 +1,8 @@
 package com.acme.tallerazo.workShopManagment.application.internal.commandservices;
 import com.acme.tallerazo.workShopManagment.domain.model.aggregates.Workshop;
 import com.acme.tallerazo.workShopManagment.domain.model.commands.UpdateWorkshopCommand;
+import com.acme.tallerazo.workShopManagment.domain.model.commands.UpdateWorkshopScheduleCommand;
+import com.acme.tallerazo.workShopManagment.domain.model.entities.ScheduleEntry;
 import com.acme.tallerazo.workShopManagment.domain.model.valueobjects.WorkshopLocation;
 import com.acme.tallerazo.workShopManagment.domain.model.valueobjects.WorkshopName;
 import com.acme.tallerazo.workShopManagment.domain.services.DistrictQueryService;
@@ -118,5 +120,15 @@ public class WorkshopCommandServiceImpl implements WorkshopCommandService {
         );
         workshopRepository.save(existedWorkshop);
         return workshopRepository.findByWorkshopName(workshopName);
+    }
+
+    @Override
+    public Optional<Workshop> handle (UpdateWorkshopScheduleCommand command){
+        Workshop workshop = workshopRepository.findById(command.workshopId())
+                .orElseThrow(() -> new RuntimeException("Workshop not found"));
+        List<ScheduleEntry> schedule = command.schedule();
+        workshop.updateSchedule(schedule);
+        Workshop newWorkshop = workshopRepository.save(workshop);
+        return Optional.of(newWorkshop);
     }
 }

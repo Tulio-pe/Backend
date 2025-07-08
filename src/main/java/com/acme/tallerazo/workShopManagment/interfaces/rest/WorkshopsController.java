@@ -6,9 +6,11 @@ import com.acme.tallerazo.workShopManagment.domain.services.WorkshopCommandServi
 import com.acme.tallerazo.workShopManagment.domain.services.WorkshopQueryService;
 import com.acme.tallerazo.workShopManagment.interfaces.rest.resource.CreateWorkshopResource;
 import com.acme.tallerazo.workShopManagment.interfaces.rest.resource.UpdateWorkshopResource;
+import com.acme.tallerazo.workShopManagment.interfaces.rest.resource.UpdateWorkshopScheduleResource;
 import com.acme.tallerazo.workShopManagment.interfaces.rest.resource.WorkshopResource;
 import com.acme.tallerazo.workShopManagment.interfaces.rest.transform.CreateWorkshopCommandFromResourceAssembler;
 import com.acme.tallerazo.workShopManagment.interfaces.rest.transform.UpdateWorkshopCommandFromResourceAssembler;
+import com.acme.tallerazo.workShopManagment.interfaces.rest.transform.UpdateWorkshopScheduleCommandFromResourceAssembler;
 import com.acme.tallerazo.workShopManagment.interfaces.rest.transform.WorkshopResourceFromEntityAssembler;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -88,4 +90,32 @@ public class WorkshopsController {
         var workshopResource = WorkshopResourceFromEntityAssembler.ToResourceFromEntity(workshop.get());
         return ResponseEntity.ok(workshopResource); // 200 OK para update
     }
+
+    @PutMapping("/{id}/schedule")
+    @Operation(
+            summary = "Update workshop schedule",
+            description = "Update the schedule of an existing workshop"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Workshop schedule updated successfully"),
+            @ApiResponse(responseCode = "400", description = "Bad Request"),
+            @ApiResponse(responseCode = "404", description = "Workshop not found")
+    })
+    public ResponseEntity<WorkshopResource> updateWorkshopSchedule(
+            @RequestBody UpdateWorkshopScheduleResource updateWorkshopScheduleResource,
+            @PathVariable Long id) {
+
+        var updateWorkshopScheduleCommand =
+                UpdateWorkshopScheduleCommandFromResourceAssembler.toCommandFromResource(id, updateWorkshopScheduleResource);
+
+        var workshop = workshopcommandService.handle(updateWorkshopScheduleCommand);
+
+        if (workshop.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        var workshopResource = WorkshopResourceFromEntityAssembler.ToResourceFromEntity(workshop.get());
+        return ResponseEntity.ok(workshopResource);
+    }
+
 }

@@ -98,6 +98,13 @@ public class Workshop extends AuditableAbstractAggregateRoot<Workshop> {
         this.addServices(services);
     }
 
+    public void updateSchedule(List<ScheduleEntry> newSchedule) {
+        this.schedule.clear();
+        if (newSchedule != null) {
+            this.schedule.addAll(newSchedule);
+        }
+    }
+
     private void addServices(List<Service> services) {
         Set<Service> validatedSet = new HashSet<>(Service.ValidateServiceSet(services));
         this.services.clear();
