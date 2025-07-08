@@ -2,11 +2,12 @@ package com.acme.tallerazo.workShopManagment.infrastructure.persistence.jpa.repo
 
 import com.acme.tallerazo.workShopManagment.domain.model.entities.District;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
-
+@Repository
 public interface DistrictRepository  extends JpaRepository<District, Long> {
-    List<District> getDistrictByProvinceId(Long id);
+    List<District> getAllByProvinceId(Long provinceId);
 
     District getDistrictById(Long id);
 }

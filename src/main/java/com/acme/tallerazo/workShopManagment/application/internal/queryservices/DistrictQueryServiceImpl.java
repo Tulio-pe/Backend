@@ -1,14 +1,15 @@
 package com.acme.tallerazo.workShopManagment.application.internal.queryservices;
 
 import com.acme.tallerazo.workShopManagment.domain.model.entities.District;
-import com.acme.tallerazo.workShopManagment.domain.model.queries.GetDistrictById;
-import com.acme.tallerazo.workShopManagment.domain.model.queries.GetDistrictsByProvinceId;
+import com.acme.tallerazo.workShopManagment.domain.model.queries.GetDistrictByIdQuery;
+import com.acme.tallerazo.workShopManagment.domain.model.queries.GetAllDistrictsByProvinceIdQuery;
 import com.acme.tallerazo.workShopManagment.domain.services.DistrictQueryService;
 import com.acme.tallerazo.workShopManagment.infrastructure.persistence.jpa.repositories.DistrictRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-
+@Service
 public class DistrictQueryServiceImpl implements DistrictQueryService {
 
     private final DistrictRepository districtRepository;
@@ -18,12 +19,13 @@ public class DistrictQueryServiceImpl implements DistrictQueryService {
     }
 
     @Override
-    public List<District> handle(GetDistrictsByProvinceId query) {
-        return List.of();
+    public List<District> handle(GetAllDistrictsByProvinceIdQuery query)
+    {
+        return districtRepository.getAllByProvinceId(query.provinceId());
     }
     @Override
-    public Optional<District>handle(GetDistrictById query) {
-        var district = districtRepository.getDistrictById(query.districtId());
-        return Optional.of(district);
+    public Optional<District>handle(GetDistrictByIdQuery query) {
+      return  districtRepository.findById(query.districtId());
+
     }
 }

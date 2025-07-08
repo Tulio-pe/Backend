@@ -1,10 +1,11 @@
 package com.acme.tallerazo.workShopManagment.domain.services;
 
 import com.acme.tallerazo.workShopManagment.domain.model.entities.Region;
-import com.acme.tallerazo.workShopManagment.domain.model.queries.GetAllRegions;
+import com.acme.tallerazo.workShopManagment.domain.model.queries.GetAllRegionsQuery;
 
-import java.util.Optional;
+import java.util.List;
 
 public interface RegionQueryService {
-    Optional<Region> handle(GetAllRegions query);
+    List<Region> handle(GetAllRegionsQuery query);
+
 }
