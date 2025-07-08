@@ -3,11 +3,13 @@ package com.acme.tallerazo.workShopManagment.domain.model.valueobjects;
 import com.acme.tallerazo.workShopManagment.domain.model.entities.District;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Embeddable
 @Data
 @NoArgsConstructor
+@Getter
 public class WorkshopLocation {
 
     @Column(name = "workshop_address", nullable = false)

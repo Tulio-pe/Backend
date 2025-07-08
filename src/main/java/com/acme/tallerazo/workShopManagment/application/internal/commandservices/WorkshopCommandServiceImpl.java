@@ -1,5 +1,6 @@
 package com.acme.tallerazo.workShopManagment.application.internal.commandservices;
 import com.acme.tallerazo.workShopManagment.domain.model.aggregates.Workshop;
+import com.acme.tallerazo.workShopManagment.domain.model.commands.UpdateWorkshopCommand;
 import com.acme.tallerazo.workShopManagment.domain.model.valueobjects.WorkshopLocation;
 import com.acme.tallerazo.workShopManagment.domain.model.valueobjects.WorkshopName;
 import com.acme.tallerazo.workShopManagment.domain.services.DistrictQueryService;
@@ -7,8 +8,11 @@ import com.acme.tallerazo.workShopManagment.domain.services.WorkshopCommandServi
 import com.acme.tallerazo.workShopManagment.infrastructure.persistence.jpa.repositories.DistrictRepository;
 import com.acme.tallerazo.workShopManagment.infrastructure.persistence.jpa.repositories.ServiceRepository;
 import com.acme.tallerazo.workShopManagment.infrastructure.persistence.jpa.repositories.WorkshopRepository;
+import org.hibernate.jdbc.Work;
 import org.springframework.stereotype.Service;
 import com.acme.tallerazo.workShopManagment.domain.model.commands.CreateWorkshopCommand;
+
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -60,19 +64,59 @@ public class WorkshopCommandServiceImpl implements WorkshopCommandService {
     @Override
     public Optional<Workshop> handle(CreateWorkshopCommand command) {
         var district = districtRepository.getDistrictById(command.districtId());
-        if(district == null) {
+        if (district == null) {
             throw new RuntimeException("District not found");
         }
-        var workshopName=new WorkshopName(command.workshopName());
-        if (workshopRepository.existsByWorkshopName(workshopName))
-        { throw new RuntimeException("workshop with name %s already exists".formatted(command.workshopName())); }
-        var services = command.services().stream().map(role -> serviceRepository.findByName(role.getName()).orElseThrow(() -> new RuntimeException("service name not found"))).toList();
+
+        WorkshopName workshopName = new WorkshopName(command.workshopName());
+        if (workshopRepository.existsByWorkshopName(workshopName)) {
+            throw new RuntimeException("Workshop with name '%s' already exists".formatted(command.workshopName()));
+        }
 
         WorkshopLocation location = new WorkshopLocation(command.workshopAddress(), district);
 
-        var workshop = new Workshop(command.workshopName(), command.workshopPhone(),location,command.email(),command.photo(),command.description(),command.managerId(),services);
-
+        Workshop workshop = new Workshop(
+                command.workshopName(),
+                command.workshopPhone(),
+                location,
+                command.workshopEmail(),
+                command.photo(),
+                command.workshopDescription(),
+                command.managerId(),
+                command.services(),
+                command.schedule()
+        );
         workshopRepository.save(workshop);
+        return workshopRepository.findByWorkshopName(workshopName);
+    }
+
+    @Override
+    public Optional<Workshop> handle(Long id, UpdateWorkshopCommand command){
+
+        Workshop existedWorkshop = workshopRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Workshop with id '%d' not found".formatted(id)));
+
+        var district = districtRepository.getDistrictById(command.districtId());
+        if (district == null) {
+            throw new RuntimeException("District not found");
+        }
+
+        WorkshopName workshopName = new WorkshopName(command.workshopName());
+        if (workshopRepository.existsByWorkshopName(workshopName)) {
+            throw new RuntimeException("Workshop with name '%s' already exists".formatted(command.workshopName()));
+        }
+        WorkshopLocation location = new WorkshopLocation(command.workshopAddress(), district);
+        existedWorkshop.update(
+                command.workshopName(),
+                command.workshopPhone(),
+                location,
+                command.workshopEmail(),
+                command.photo(),
+                command.workshopDescription(),
+                command.managerId(),
+                command.services()
+        );
+        workshopRepository.save(existedWorkshop);
         return workshopRepository.findByWorkshopName(workshopName);
     }
 }

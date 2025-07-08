@@ -1,6 +1,8 @@
 package com.acme.tallerazo.workShopManagment.domain.model.aggregates;
 
 import com.acme.tallerazo.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
+import com.acme.tallerazo.workShopManagment.domain.model.commands.CreateWorkshopCommand;
+import com.acme.tallerazo.workShopManagment.domain.model.commands.UpdateWorkshopCommand;
 import com.acme.tallerazo.workShopManagment.domain.model.entities.ScheduleEntry;
 import com.acme.tallerazo.workShopManagment.domain.model.entities.Service;
 import com.acme.tallerazo.workShopManagment.domain.model.valueobjects.*;
@@ -58,27 +60,51 @@ public class Workshop extends AuditableAbstractAggregateRoot<Workshop> {
 
     public Workshop(){this.services = new HashSet<>();}
 
-    public Workshop(String workshopName, String workshopPhone, WorkshopLocation workshopLocation, String workshopEmail,String photo, String workshopDescription, Long managerId) {
+    public Workshop( String workshopName,
+                     String workshopPhone,
+                     WorkshopLocation workshopLocation,
+                     String workshopEmail,
+                     String photo,
+                     String workshopDescription,
+                     Long managerId,
+                     List<Service> services,
+                     List<ScheduleEntry> schedule) {
         this.workshopName = new WorkshopName(workshopName);
         this.workshopPhone = new WorkshopPhone(workshopPhone);
         this.workshopLocation = workshopLocation;
-        this.workshopEmail=new WorkshopEmail(workshopEmail);
-        this.photo=new Photo(photo);
-        this.description=new WorkshopDescription(workshopDescription);
-        this.services=new HashSet<>();
-        this.managerId=new ManagerId(managerId);
-    }
-    public Workshop(String workshopName, String workshopPhone, WorkshopLocation workshopLocation, String workshopEmail, String photo, String workshopDescription, Long managerId, List<Service>services){
-        this(workshopName,workshopPhone,workshopLocation,workshopEmail,photo,workshopDescription,managerId);
-        addServices(services);
+        this.workshopEmail = new WorkshopEmail(workshopEmail);
+        this.photo = new Photo(photo);
+        this.description = new WorkshopDescription(workshopDescription);
+        this.managerId = new ManagerId(managerId);
+        this.addServices(services);
+        this.schedule = schedule != null ? new ArrayList<>(schedule) : new ArrayList<>();
     }
 
-    public Workshop addServices(List<Service> services){
-        var validateServiceSet= Service.ValidateServiceSet(services);
-        this.services.addAll(validateServiceSet);
-        return this;
+    public void update(String workshopName,
+                    String workshopPhone,
+                    WorkshopLocation workshopLocation,
+                    String workshopEmail,
+                    String photo,
+                    String workshopDescription,
+                    Long managerId,
+                    List<Service> services) {
+        this.workshopName = new WorkshopName(workshopName);
+        this.workshopPhone = new WorkshopPhone(workshopPhone);
+        this.workshopLocation = workshopLocation;
+        this.workshopEmail = new WorkshopEmail(workshopEmail);
+        this.photo = new Photo(photo);
+        this.description = new WorkshopDescription(workshopDescription);
+        this.managerId = new ManagerId(managerId);
+        this.addServices(services);
     }
-    //update schedule
+
+    private void addServices(List<Service> services) {
+        Set<Service> validatedSet = new HashSet<>(Service.ValidateServiceSet(services));
+        this.services.clear();
+        this.services.addAll(validatedSet);
+    }
+
+
 
     //update workshop info
 

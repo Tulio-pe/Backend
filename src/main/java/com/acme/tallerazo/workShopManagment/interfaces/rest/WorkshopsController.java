@@ -5,8 +5,10 @@ import com.acme.tallerazo.workShopManagment.domain.model.valueobjects.WorkshopNa
 import com.acme.tallerazo.workShopManagment.domain.services.WorkshopCommandService;
 import com.acme.tallerazo.workShopManagment.domain.services.WorkshopQueryService;
 import com.acme.tallerazo.workShopManagment.interfaces.rest.resource.CreateWorkshopResource;
+import com.acme.tallerazo.workShopManagment.interfaces.rest.resource.UpdateWorkshopResource;
 import com.acme.tallerazo.workShopManagment.interfaces.rest.resource.WorkshopResource;
 import com.acme.tallerazo.workShopManagment.interfaces.rest.transform.CreateWorkshopCommandFromResourceAssembler;
+import com.acme.tallerazo.workShopManagment.interfaces.rest.transform.UpdateWorkshopCommandFromResourceAssembler;
 import com.acme.tallerazo.workShopManagment.interfaces.rest.transform.WorkshopResourceFromEntityAssembler;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -25,10 +27,10 @@ public class WorkshopsController {
     private final  WorkshopQueryService workshopQueryservice;
     private final  WorkshopCommandService workshopcommandService;
 
-     public WorkshopsController(WorkshopQueryService workshopQueryservice, WorkshopCommandService workshopcommandService){
+    public WorkshopsController(WorkshopQueryService workshopQueryservice, WorkshopCommandService workshopcommandService){
          this.workshopQueryservice=workshopQueryservice;
          this.workshopcommandService = workshopcommandService;
-     }
+    }
     @GetMapping("/{workshopName}")
     @Operation(summary = "Get workshop By Name")
     @ApiResponses(value={
@@ -63,5 +65,27 @@ public class WorkshopsController {
         }
         var workshopResource= WorkshopResourceFromEntityAssembler.ToResourceFromEntity((workshop.get()));
         return new ResponseEntity<>(workshopResource, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/{id}")
+    @Operation(
+            summary = "Update workshop",
+            description = "Update an existing workshop with the provided information"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Workshop updated successfully"),
+            @ApiResponse(responseCode = "400", description = "Bad Request"),
+            @ApiResponse(responseCode = "404", description = "Workshop not found")
+    })
+    public ResponseEntity<WorkshopResource> updateWorkshop(
+            @RequestBody UpdateWorkshopResource updateWorkshopResource,
+            @PathVariable Long id) {
+        var updateWorkshopCommand = UpdateWorkshopCommandFromResourceAssembler.toCommandFromResource(updateWorkshopResource);
+        var workshop = workshopcommandService.handle(id, updateWorkshopCommand);
+        if (workshop.isEmpty()) {
+            return ResponseEntity.notFound().build(); // Mejor retornar 404 si no existe el workshop
+        }
+        var workshopResource = WorkshopResourceFromEntityAssembler.ToResourceFromEntity(workshop.get());
+        return ResponseEntity.ok(workshopResource); // 200 OK para update
     }
 }

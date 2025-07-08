@@ -39,7 +39,6 @@ public class Car extends AuditableAbstractAggregateRoot<Car> {
      * @param command the command containing the car information to initialize:
      *                brand, model, license plate, fuel type, and manufacturing year.
      */
-
     public Car(CreateCarCommand command) {
             this.brand= new Brand(command.brand());
             this.model= new Model(command.model());

@@ -1,17 +1,16 @@
 package com.acme.tallerazo.workShopManagment.interfaces.rest.resource;
-import com.acme.tallerazo.workShopManagment.interfaces.rest.resource.ScheduleEntryResource;
 
 import java.util.List;
 
-public record CreateWorkshopResource(
+public record UpdateWorkshopResource(
         String workshopName,
         String workshopPhone,
         String workshopAddress,
         String workshopEmail,
         String photo,
-        String description,
+        String workshopDescription,
         Long managerId,
         Long districtId,
-        List<String> services,
-        List<ScheduleEntryResource> schedule
-) {}
+        List<String> services
+) {
+}

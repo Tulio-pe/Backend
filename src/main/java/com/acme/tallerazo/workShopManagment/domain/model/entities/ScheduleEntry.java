@@ -23,4 +23,10 @@ public class ScheduleEntry {
     private String startTime;
     @Column(nullable = false)
     private String endTime;
+
+    public ScheduleEntry(String startTime, String endTime, DayOfWeek dayOfWeek) {
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.dayOfWeek = dayOfWeek;
+    }
 }
