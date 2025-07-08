@@ -48,6 +48,24 @@ public class Car extends AuditableAbstractAggregateRoot<Car> {
             this.year= new Year(command.year());
             this.workshopId= new WorkshopId(command.workshopId());
     }
+    /**
+     * Updates the current car's information with new values.
+     *
+     * @param brand the new brand of the car. Must not be null or blank.
+     * @param model the new model of the car. Must not be null or blank.
+     * @param plate the new license plate. Must not be null or blank.
+     * @param fuelType the new fuel type. Must not be null or blank.
+     * @param year the new manufacturing year. Must not be null or blank.
+     * @return the updated car instance (this)
+     */
+    public Car updateInformation(String brand, String model, String plate, String fuelType, String year) {
+        this.brand = new Brand(brand);
+        this.model = new Model(model);
+        this.plate = new Plate(plate);
+        this.fuelType = new FuelType(fuelType);
+        this.year = new Year(year);
+        return this;
+    }
 
     public String getFuelType(){return this.fuelType.fuelType();}
 

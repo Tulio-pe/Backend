@@ -7,8 +7,10 @@ import com.acme.tallerazo.repairManagement.domain.services.CarCommandService;
 import com.acme.tallerazo.repairManagement.domain.services.CarQueryService;
 import com.acme.tallerazo.repairManagement.interfaces.rest.assembler.CarResourceFromEntityAssembler;
 import com.acme.tallerazo.repairManagement.interfaces.rest.assembler.CreateCarCommandFromResourceAssembler;
+import com.acme.tallerazo.repairManagement.interfaces.rest.assembler.UpdateCarCommandFromResourceAssembler;
 import com.acme.tallerazo.repairManagement.interfaces.rest.resource.CarResource;
 import com.acme.tallerazo.repairManagement.interfaces.rest.resource.CreateCarResource;
+import com.acme.tallerazo.repairManagement.interfaces.rest.resource.UpdateCarResource;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -17,10 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -86,5 +85,33 @@ public class CarsController {
         var carResources= cars.stream().map(CarResourceFromEntityAssembler::toResourceFromEntity).toList();
         return ResponseEntity.ok(carResources);
     }
+    /**
+     * Update an existing car
+     *
+     * @param carId the ID of the car to update
+     * @param resource the resource containing the updated car data
+     * @return the updated car resource, or 404 if not found
+     */
+    @PutMapping("/{carId}")
+    @Operation(summary = "Update car", description = "Updates a car by ID with the provided data")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Car updated successfully"),
+            @ApiResponse(responseCode = "404", description = "Car not found"),
+            @ApiResponse(responseCode = "400", description = "Invalid request data")
+    })
+    public ResponseEntity<CarResource> updateCar(@PathVariable Long carId, @RequestBody UpdateCarResource resource) {
+        var command = UpdateCarCommandFromResourceAssembler.toCommandFromResource(carId, resource);
+        var updatedCar = carCommandService.handle(command);
 
+        if (updatedCar.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        var updatedCarEntity = updatedCar.get();
+        var carResource = CarResourceFromEntityAssembler.toResourceFromEntity(updatedCarEntity);
+
+        return ResponseEntity.ok(carResource);
+    }
 }
+
+

@@ -11,4 +11,5 @@ import java.util.Optional;
 public interface CarRepository extends JpaRepository<Car,Long> {
     boolean existsByPlate(Plate plate);
     Optional<Car>findByPlate(Plate plate);
+      boolean existsByPlateAndIdNot(Plate plate, Long id);
 }
