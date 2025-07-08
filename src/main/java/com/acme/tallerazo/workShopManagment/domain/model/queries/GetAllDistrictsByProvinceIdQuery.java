@@ -1,4 +1,4 @@
 package com.acme.tallerazo.workShopManagment.domain.model.queries;
 
-public record GetWorkshopsByDistrictId(Long districId) {
+public record GetAllDistrictsByProvinceIdQuery(Long provinceId) {
 }
