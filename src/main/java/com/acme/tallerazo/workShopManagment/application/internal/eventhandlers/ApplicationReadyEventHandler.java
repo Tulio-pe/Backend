@@ -43,7 +43,7 @@ public class ApplicationReadyEventHandler {
         this.provinceCommandService = provinceCommandService;
         this.districtCommandService = districtCommandService;
     }
-
+     /*
     @EventListener
     public void on(ApplicationReadyEvent event) {
         String applicationName = event.getApplicationContext().getId();
@@ -103,7 +103,7 @@ public class ApplicationReadyEventHandler {
         LOGGER.info("Locations seeding finished for {} at {}",
                 applicationName, currentTimestamp());
     }
-
+*/
     private Timestamp currentTimestamp() {
         return new Timestamp(System.currentTimeMillis());
     }
