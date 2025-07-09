@@ -55,7 +55,7 @@ public class ApplicationReadyEventHandler {
 
         LOGGER.info("Starting locations seeding for {} at {}",
                 applicationName, currentTimestamp());
-        /*
+
         List<ExternalGeoResource> locations = externalGeoApiClient.fetchDistricts();
 
         // 1) Seed unique regions
@@ -99,7 +99,7 @@ public class ApplicationReadyEventHandler {
             districtCommandService.handle(new CreateDistrictCommand(districtName, parent.getId()));
         }
 
-        */
+
         LOGGER.info("Locations seeding finished for {} at {}",
                 applicationName, currentTimestamp());
     }
