@@ -48,7 +48,7 @@ public class Workshop extends AuditableAbstractAggregateRoot<Workshop> {
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name="workshop_services",joinColumns =@JoinColumn(name="workshop_id"),
             inverseJoinColumns = @JoinColumn(name="services_id"))
-    private Set<Service>services;
+    private List<Service>services;
 
     @OneToMany(
             cascade = CascadeType.ALL,
@@ -58,7 +58,7 @@ public class Workshop extends AuditableAbstractAggregateRoot<Workshop> {
     private List<ScheduleEntry> schedule = new ArrayList<>();
 
 
-    public Workshop(){this.services = new HashSet<>();}
+    public Workshop(){this.services =  new ArrayList<>();}
 
     public Workshop( String workshopName,
                      String workshopPhone,
@@ -76,11 +76,12 @@ public class Workshop extends AuditableAbstractAggregateRoot<Workshop> {
         this.photo = new Photo(photo);
         this.description = new WorkshopDescription(workshopDescription);
         this.managerId = new ManagerId(managerId);
-        this.addServices(services);
         this.schedule = schedule != null ? new ArrayList<>(schedule) : new ArrayList<>();
+        this.services = services != null ? new ArrayList<>(services) : new ArrayList<>();
     }
 
-    public void update(String workshopName,
+    public void update(
+                    String workshopName,
                     String workshopPhone,
                     WorkshopLocation workshopLocation,
                     String workshopEmail,
@@ -95,7 +96,7 @@ public class Workshop extends AuditableAbstractAggregateRoot<Workshop> {
         this.photo = new Photo(photo);
         this.description = new WorkshopDescription(workshopDescription);
         this.managerId = new ManagerId(managerId);
-        this.addServices(services);
+        this.services = services != null ? new ArrayList<>(services) : new ArrayList<>();
     }
 
     public void updateSchedule(List<ScheduleEntry> newSchedule) {
@@ -103,12 +104,6 @@ public class Workshop extends AuditableAbstractAggregateRoot<Workshop> {
         if (newSchedule != null) {
             this.schedule.addAll(newSchedule);
         }
-    }
-
-    private void addServices(List<Service> services) {
-        Set<Service> validatedSet = new HashSet<>(Service.ValidateServiceSet(services));
-        this.services.clear();
-        this.services.addAll(validatedSet);
     }
 
 
