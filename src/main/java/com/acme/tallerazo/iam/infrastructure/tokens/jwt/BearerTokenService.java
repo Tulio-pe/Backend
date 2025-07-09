@@ -1,6 +1,6 @@
 package com.acme.tallerazo.iam.infrastructure.tokens.jwt;
 
-import com.acme.tallerazo.iam.application.interal.outboundservices.tokens.TokenService;
+import com.acme.tallerazo.iam.application.internal.outboundservices.tokens.TokenService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.core.Authentication;
 
