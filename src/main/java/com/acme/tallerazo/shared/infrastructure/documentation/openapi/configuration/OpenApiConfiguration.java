@@ -27,7 +27,7 @@ public class OpenApiConfiguration {
     // Methods
 
     @Bean
-    public OpenAPI learningPlatformOpenApi() {
+    public OpenAPI tallerazoOpenAPI() {
         // General configuration
         var openApi = new OpenAPI();
         openApi
@@ -55,8 +55,15 @@ public class OpenApiConfiguration {
                                         .scheme("bearer")
                                         .bearerFormat("JWT")));
 
-        // Return the OpenAPI configuration object with all the settings
 
+        openApi.addServersItem(new io.swagger.v3.oas.models.servers.Server()
+                .url("https://backend-production-1cc0.up.railway.app")
+                .description("Production server"));
+        openApi.addServersItem(new io.swagger.v3.oas.models.servers.Server()
+                .url("http://localhost:8080")
+                .description("Local server"));
+
+        // Return the OpenAPI configuration object with all the settings
         return openApi;
     }
 }
