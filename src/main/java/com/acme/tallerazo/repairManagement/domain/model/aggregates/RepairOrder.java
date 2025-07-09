@@ -7,7 +7,7 @@ import com.acme.tallerazo.repairManagement.domain.model.valueobjects.RepairOrder
 import com.acme.tallerazo.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
 import jakarta.persistence.*;
 import lombok.Getter;
-
+@Getter
 @Entity
 public class RepairOrder extends AuditableAbstractAggregateRoot<RepairOrder> {
     @Embedded
@@ -15,7 +15,6 @@ public class RepairOrder extends AuditableAbstractAggregateRoot<RepairOrder> {
 private RepairId repairId;
     @Embedded
     private Details details;
-    @Getter
     @ManyToOne
     @JoinColumn(name="car_id")
     private Car car;
