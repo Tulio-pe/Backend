@@ -47,8 +47,7 @@ public class WorkshopsController {
              return ResponseEntity.notFound().build();
          }
          var workshopEntity=Workshop.get();
-         var workshopResource=
-         WorkshopResourceFromEntityAssembler.ToResourceFromEntity((workshopEntity));
+         var workshopResource= WorkshopResourceFromEntityAssembler.ToResourceFromEntity((workshopEntity));
          return ResponseEntity.ok(workshopResource);
      }
 

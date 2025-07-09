@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping(value = "/api/v1/regions", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "api/v1/regions", produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name = "Regions", description = "Available region EndPoint")
 public class RegionsController {
     private final RegionQueryService regionQueryService;

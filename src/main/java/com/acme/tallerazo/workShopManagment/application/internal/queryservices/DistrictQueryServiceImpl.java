@@ -21,7 +21,7 @@ public class DistrictQueryServiceImpl implements DistrictQueryService {
     @Override
     public List<District> handle(GetAllDistrictsByProvinceIdQuery query)
     {
-        return districtRepository.getAllByProvinceId(query.provinceId());
+        return districtRepository.findAllByProvinceId(query.provinceId());
     }
     @Override
     public Optional<District>handle(GetDistrictByIdQuery query) {

@@ -2,6 +2,7 @@ package com.acme.tallerazo.repairManagement.interfaces.rest;
 
 import com.acme.tallerazo.repairManagement.domain.model.queries.GetAllCarsQuery;
 import com.acme.tallerazo.repairManagement.domain.model.queries.GetCarByPlaceQuery;
+import com.acme.tallerazo.repairManagement.domain.model.queries.GetCarsByCompanyIdQuery;
 import com.acme.tallerazo.repairManagement.domain.model.valueobjects.Plate;
 import com.acme.tallerazo.repairManagement.domain.services.CarCommandService;
 import com.acme.tallerazo.repairManagement.domain.services.CarQueryService;
@@ -71,6 +72,19 @@ public class CarsController {
         var carEntity = car.get();
         var carResource = CarResourceFromEntityAssembler.toResourceFromEntity(carEntity);
         return ResponseEntity.ok(carResource);
+    }
+
+    @GetMapping("/workshop/{id}")
+    @Operation(summary = "Get cars by company id")
+    @ApiResponses(value={
+            @ApiResponse(responseCode = "200", description = "Cars found"),
+            @ApiResponse(responseCode = "404", description = "Cars not found")
+    })
+    public ResponseEntity<List<CarResource>>getCarsByWorkshopId(@RequestParam Long id) {
+        var cars= carQueryService.handle(new GetCarsByCompanyIdQuery(id));
+        if(cars.isEmpty()){return ResponseEntity.notFound().build();}
+        var carResources= cars.stream().map(CarResourceFromEntityAssembler::toResourceFromEntity).toList();
+        return ResponseEntity.ok(carResources);
     }
 
     @GetMapping

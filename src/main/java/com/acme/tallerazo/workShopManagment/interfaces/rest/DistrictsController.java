@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping(value = "/api/v1/districts", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "api/v1/districts", produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name = "Districts", description = "Available district EndPoint")
 public class DistrictsController {
 
@@ -30,7 +30,7 @@ public class DistrictsController {
         this.districtQueryService = districtQueryService;
     }
 
-    @GetMapping("/by-province/{provinceId}")
+    @GetMapping("/{provinceId}")
     @Operation(summary = "Get districts by province ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Districts found"),
