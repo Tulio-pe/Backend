@@ -1,58 +1,82 @@
 package com.acme.tallerazo.iam.infrastructure.authorization.sfs.pipeline;
 
-import com.acme.tallerazo.iam.infrastructure.authorization.sfs.model.UsernamePasswordAuthenticationTokenBuilder;
 import com.acme.tallerazo.iam.infrastructure.tokens.jwt.BearerTokenService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.lang.NonNull;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 public class BearerAuthorizationRequestFilter extends OncePerRequestFilter {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(BearerAuthorizationRequestFilter.class);
     private final BearerTokenService tokenService;
-
-
-    @Qualifier("defaultUserDetailsService")
     private final UserDetailsService userDetailsService;
+
+    // 🔥 PATHS QUE NO REQUIEREN AUTENTICACIÓN JWT
+    private static final List<String> EXCLUDED_PATHS = Arrays.asList(
+            "/api/v1/authentication",
+            "/api/v1/workshops",        // 🔥 AGREGAR WORKSHOPS
+            "/api/v1/services",
+            "/api/v1/regions",
+            "/api/v1/districts",
+            "/api/v1/provinces",
+            "/v3/api-docs",
+            "/swagger-ui",
+            "/swagger-resources",
+            "/webjars"
+    );
 
     public BearerAuthorizationRequestFilter(BearerTokenService tokenService, UserDetailsService userDetailsService) {
         this.tokenService = tokenService;
         this.userDetailsService = userDetailsService;
     }
 
-    /**
-     * This method is responsible for filtering requests and setting the user authentication.
-     * @param request The request object.
-     * @param response The response object.
-     * @param filterChain The filter chain object.
-     */
     @Override
-    protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain) throws ServletException, IOException {
-        try {
-            String token = tokenService.getBearerTokenFrom(request);
-            LOGGER.info("Token: {}", token);
-            if (token != null && tokenService.validateToken(token)) {
-                String username = tokenService.getUsernameFromToken(token);
-                var userDetails = userDetailsService.loadUserByUsername(username);
-                SecurityContextHolder.getContext().setAuthentication(UsernamePasswordAuthenticationTokenBuilder.build(userDetails, request));
-            } else {
-                LOGGER.info("Token is not valid");
-            }
+    protected void doFilterInternal(@NonNull HttpServletRequest request,
+                                    @NonNull HttpServletResponse response,
+                                    @NonNull FilterChain filterChain) throws ServletException, IOException {
 
-        } catch (Exception e) {
-            LOGGER.error("Cannot set user authentication: {}", e.getMessage());
+        String requestPath = request.getRequestURI();
+
+        // 🔥 SI LA RUTA ESTÁ EXCLUIDA, SALTAR AUTENTICACIÓN JWT
+        if (EXCLUDED_PATHS.stream().anyMatch(requestPath::startsWith)) {
+            logger.info("🚀 Skipping JWT authentication for: " + requestPath);
+            filterChain.doFilter(request, response);
+            return;
         }
+
+        try {
+            String token = getTokenFromRequest(request);
+            if (StringUtils.hasText(token) && tokenService.validateToken(token)) {
+                String username = tokenService.getUsernameFromToken(token);
+                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+            }
+        } catch (Exception exception) {
+            logger.error("Cannot set user authentication: {}");
+        }
+
         filterChain.doFilter(request, response);
     }
-}
 
+    private String getTokenFromRequest(HttpServletRequest request) {
+        String bearerToken = request.getHeader("Authorization");
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
+            return bearerToken.substring(7);
+        }
+        return null;
+    }
+}
